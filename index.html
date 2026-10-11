@@ -113,6 +113,84 @@ section{min-height:100vh;padding:70px;position:relative;animation:fadeIn 0.45s e
 .avail-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,245,196,0.08);border:1px solid rgba(0,245,196,0.2);padding:8px 16px;border-radius:100px;font-size:0.78rem;font-weight:600;color:var(--accent);margin-bottom:20px}
 .contact-card h3{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:10px}
 .contact-card p{color:var(--text-muted);font-size:0.88rem;line-height:1.7;margin-bottom:24px}
+
+/* Responsive layout */
+.wrapper{min-width:0;min-height:0}
+.content-area{min-width:0}
+section{min-width:0}
+img,svg,video{max-width:100%}
+.contact-link-body{min-width:0;overflow-wrap:anywhere}
+.contact-link-body span{overflow-wrap:anywhere}
+
+@media (max-width:1100px){
+  section{padding:52px 44px}
+  .home-hero{gap:36px}
+  .contact-layout{gap:28px}
+}
+
+@media (max-width:800px){
+  html,body{height:100%;height:100dvh}
+  .wrapper{height:100vh;height:100dvh;flex-direction:column}
+  .sidebar{width:100%;height:auto;flex:0 0 auto;padding:14px 18px 10px;border-right:0;border-bottom:1px solid var(--border);overflow:visible}
+  .sidebar::before{display:none}
+  .brand{padding:0 4px 12px;border-bottom:0}
+  .brand-name{font-size:1.15rem}
+  .brand-tag{font-size:.62rem;letter-spacing:1.5px}
+  .nav-links{display:flex;gap:4px;padding:0;flex:initial;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links li{flex:0 0 auto;margin:0}
+  .nav-links a{gap:7px;padding:10px 12px;font-size:.82rem;white-space:nowrap;border-radius:8px}
+  .nav-links a:hover,.nav-links a.active{padding-left:12px}
+  .nav-links a::before{top:auto;right:10px;bottom:0;width:auto;height:0;transition:height .2s}
+  .nav-links a:hover::before,.nav-links a.active::before{width:auto;height:2px}
+  .sidebar-footer{display:none}
+  .content-area{height:auto;min-height:0;flex:1 1 auto;overflow-y:auto}
+  .content-area::before{left:0;background-size:44px 44px}
+  section{min-height:100%;padding:44px 32px}
+}
+
+@media (max-width:600px){
+  section{padding:32px 20px}
+  .home-hero{grid-template-columns:1fr;gap:44px;min-height:0;padding:14px 0 30px}
+  .hero-text{order:1}
+  .hero-visual{order:0;padding:18px 0 6px}
+  .hero-text h1{font-size:clamp(2.35rem,11vw,3.3rem);letter-spacing:-1.4px;margin-bottom:18px}
+  .hero-text p{font-size:.97rem;line-height:1.7;margin-bottom:24px}
+  .avatar-container,.profile-img{width:190px;height:190px}
+  .avatar-ring{inset:-14px}
+  .avatar-ring2{inset:-27px}
+  .hero-actions{gap:10px}
+  .btn-primary,.btn-secondary{padding:12px 16px;font-size:.8rem}
+  .skills-chips{margin-top:22px}
+  .section-header{margin-bottom:30px}
+  .section-header h1{font-size:clamp(1.9rem,9vw,2.5rem)}
+  .section-header p{font-size:.88rem;line-height:1.6}
+  .projects-grid,.certs-grid{grid-template-columns:1fr;gap:14px}
+  .project-card,.cert-card{padding:22px}
+  .edu-timeline::before{left:16px}
+  .edu-item{gap:14px;margin-bottom:22px}
+  .edu-dot{width:34px;height:34px;font-size:.95rem}
+  .edu-body{padding:20px 18px}
+  .edu-body h3{font-size:1rem}
+  .edu-ongoing{margin-left:4px}
+  .contact-layout{grid-template-columns:1fr;gap:24px}
+  .contact-info h2{font-size:1.35rem}
+  .contact-card{padding:24px}
+  .contact-link{padding:13px 14px;gap:11px}
+  .contact-link-body span{font-size:.82rem}
+}
+
+@media (max-width:360px){
+  .sidebar{padding-left:12px;padding-right:12px}
+  .nav-links a{padding:9px 9px;font-size:.76rem;gap:5px}
+  section{padding-left:16px;padding-right:16px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions a{justify-content:center}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body ng-controller="AppCtrl">

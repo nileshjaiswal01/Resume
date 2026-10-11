@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="portfolioApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nilesh Jaiswal | Portfolio</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060910;--surface:#0d1117;--surface2:#111827;--accent:#00f5c4;--accent2:#7c3aed;--text:#e2e8f0;--text-muted:#64748b;--border:rgba(255,255,255,0.07);--glow:rgba(0,245,196,0.15)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:0.4}
+.wrapper{display:flex;height:100vh}
+.sidebar{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:40px 0;position:relative;overflow:hidden}
+.sidebar::before{content:'';position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(0,245,196,0.08) 0%,transparent 70%);bottom:-100px;left:-100px;border-radius:50%;pointer-events:none}
+.brand{padding:0 28px 40px;border-bottom:1px solid var(--border)}
+.brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;color:#fff;letter-spacing:-0.5px}
+.brand-name span{color:var(--accent)}
+.brand-tag{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;margin-top:4px;font-weight:500}
+.nav-links{list-style:none;padding:28px 0;flex:1}
+.nav-links li{margin-bottom:4px}
+.nav-links a{display:flex;align-items:center;gap:12px;padding:12px 28px;color:var(--text-muted);text-decoration:none;font-size:0.9rem;font-weight:500;transition:all 0.25s;position:relative}
+.nav-links a .nav-icon{font-size:1rem;width:20px;text-align:center;transition:transform 0.25s}
+.nav-links a::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent);transition:width 0.25s}
+.nav-links a:hover,.nav-links a.active{color:#fff;background:linear-gradient(90deg,rgba(0,245,196,0.08) 0%,transparent 100%);padding-left:36px}
+.nav-links a:hover::before,.nav-links a.active::before{width:3px}
+.nav-links a.active{color:var(--accent)}
+.nav-links a:hover .nav-icon,.nav-links a.active .nav-icon{transform:scale(1.2)}
+.sidebar-footer{padding:20px 28px 0;border-top:1px solid var(--border)}
+.status-dot{display:flex;align-items:center;gap:8px;font-size:0.72rem;color:var(--text-muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.content-area{flex:1;height:100vh;overflow-y:auto;background:var(--bg);position:relative;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.content-area::-webkit-scrollbar{width:4px}
+.content-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.content-area::before{content:'';position:fixed;inset:0;left:240px;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;opacity:0.4}
+section{min-height:100vh;padding:70px;position:relative;animation:fadeIn 0.45s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.home-hero{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;min-height:80vh}
+.hero-text h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,5vw,4.2rem);line-height:1.05;color:#fff;letter-spacing:-2px;margin-bottom:24px}
+.hero-text h1 .highlight{background:linear-gradient(135deg,var(--accent) 0%,#00c4f5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-text p{color:var(--text-muted);font-size:1.05rem;line-height:1.8;max-width:420px;margin-bottom:36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-weight:700;font-size:0.85rem;padding:13px 28px;border-radius:8px;text-decoration:none;transition:all 0.25s;border:none;cursor:pointer}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,245,196,0.35)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text);font-weight:500;font-size:0.85rem;padding:13px 28px;border-radius:8px;border:1px solid var(--border);text-decoration:none;transition:all 0.25s}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.04)}
+.hero-visual{display:flex;justify-content:center;align-items:center}
+.avatar-container{position:relative;width:260px;height:260px}
+.avatar-ring{position:absolute;inset:-20px;border-radius:50%;border:1px solid rgba(0,245,196,0.2);animation:spin 20s linear infinite}
+.avatar-ring::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.avatar-ring2{position:absolute;inset:-40px;border-radius:50%;border:1px dashed rgba(124,58,237,0.25);animation:spin 30s linear infinite reverse}
+.profile-img{width:260px;height:260px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,245,196,0.4);display:block;background:var(--surface2)}
+.skills-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.chip{padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:600;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);transition:all 0.2s}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.section-header{margin-bottom:50px}
+.section-header .tag{display:inline-block;font-size:0.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.section-header h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3rem);color:#fff;letter-spacing:-1.5px;line-height:1.1}
+.section-header p{color:var(--text-muted);margin-top:10px;font-size:0.95rem}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:all 0.3s;cursor:pointer}
+.project-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--glow),transparent);opacity:0;transition:opacity 0.3s}
+.project-card:hover{border-color:rgba(0,245,196,0.3);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+.project-card:hover::before{opacity:1}
+.project-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:rgba(255,255,255,0.04);line-height:1;margin-bottom:16px}
+.project-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:#fff;margin-bottom:10px}
+.project-card p{color:var(--text-muted);font-size:0.88rem;line-height:1.7}
+.project-arrow{position:absolute;top:28px;right:28px;width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:var(--text-muted);transition:all 0.25s}
+.project-card:hover .project-arrow{background:var(--accent);border-color:var(--accent);color:#000;transform:rotate(45deg)}
+.tech-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.tech-tag{padding:3px 10px;border-radius:4px;font-size:0.68rem;font-weight:600;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border)}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.cert-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
+.cert-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
+.cert-card:hover{border-color:rgba(0,245,196,0.2);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.35)}
+.cert-card:hover::after{transform:scaleX(1)}
+.cert-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,rgba(0,245,196,0.15),rgba(124,58,237,0.15));border:1px solid rgba(0,245,196,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:18px}
+.cert-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:#fff;margin-bottom:6px;line-height:1.3}
+.cert-provider{font-size:0.78rem;color:var(--accent);font-weight:600;letter-spacing:0.5px}
+.cert-cta{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:0.78rem;font-weight:600;color:var(--text-muted);transition:color 0.2s}
+.cert-card:hover .cert-cta{color:var(--accent)}
+.edu-timeline{position:relative;max-width:700px}
+.edu-timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),rgba(124,58,237,0.4),transparent)}
+.edu-item{display:flex;gap:32px;margin-bottom:36px;position:relative}
+.edu-dot{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,rgba(0,245,196,0.15),rgba(124,58,237,0.15));border:1px solid rgba(0,245,196,0.35);display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;z-index:1;box-shadow:0 0 16px rgba(0,245,196,0.12)}
+.edu-body{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 30px;transition:all 0.3s;position:relative;overflow:hidden}
+.edu-body::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform 0.35s}
+.edu-body:hover{border-color:rgba(0,245,196,0.25);transform:translateX(6px);box-shadow:0 12px 36px rgba(0,0,0,0.35)}
+.edu-body:hover::after{transform:scaleX(1)}
+.edu-year{display:inline-block;font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);background:rgba(0,245,196,0.08);border:1px solid rgba(0,245,196,0.18);padding:3px 10px;border-radius:100px;margin-bottom:12px}
+.edu-body h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.12rem;color:#fff;letter-spacing:-0.3px;margin-bottom:4px}
+.edu-inst{font-size:0.88rem;color:var(--text-muted);font-weight:500;margin-bottom:4px}
+.edu-uni{font-size:0.78rem;color:var(--text-muted);opacity:0.7;margin-bottom:14px}
+.edu-chips{display:flex;flex-wrap:wrap;gap:7px}
+.edu-chip{padding:4px 11px;border-radius:100px;font-size:0.68rem;font-weight:600;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);transition:all 0.2s}
+.edu-chip:hover{border-color:var(--accent);color:var(--accent)}
+.edu-ongoing{display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;font-weight:600;color:var(--accent);margin-left:10px;vertical-align:middle}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+.contact-info h2{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:12px}
+.contact-info p{color:var(--text-muted);font-size:0.92rem;line-height:1.7;margin-bottom:30px}
+.contact-links{display:flex;flex-direction:column;gap:14px}
+.contact-link{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:all 0.25s}
+.contact-link:hover{border-color:rgba(0,245,196,0.3);background:rgba(0,245,196,0.04);transform:translateX(4px)}
+.contact-link-icon{width:38px;height:38px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.contact-link-body small{display:block;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);font-weight:600;margin-bottom:2px}
+.contact-link-body span{font-size:0.9rem;color:#fff;font-weight:500}
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;overflow:hidden}
+.contact-card::before{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);border-radius:50%}
+.avail-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,245,196,0.08);border:1px solid rgba(0,245,196,0.2);padding:8px 16px;border-radius:100px;font-size:0.78rem;font-weight:600;color:var(--accent);margin-bottom:20px}
+.contact-card h3{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:10px}
+.contact-card p{color:var(--text-muted);font-size:0.88rem;line-height:1.7;margin-bottom:24px}
+</style>
+</head>
+<body ng-controller="AppCtrl">
+<div class="wrapper">
+  <nav class="sidebar">
+    <div class="brand">
+      <div class="brand-name">Nilesh <span>Jaiswal</span></div>
+      <div class="brand-tag">AI/ML Intern</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#!/home" ng-class="{active:isActive('/home')}"><span class="nav-icon">⌂</span> Home</a></li>
+      <li><a href="#!/projects" ng-class="{active:isActive('/projects')}"><span class="nav-icon">◈</span> Projects</a></li>
+      <!-- <li><a href="#!/certificates" ng-class="{active:isActive('/certificates')}"><span class="nav-icon">✦</span> Certificates</a></li> -->
+      <li><a href="#!/education" ng-class="{active:isActive('/education')}"><span class="nav-icon">🎓</span> Education</a></li>
+      <li><a href="#!/contact" ng-class="{active:isActive('/contact')}"><span class="nav-icon">◎</span> Contact</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="status-dot"><div class="dot"></div> Available for work</div>
+    </div>
+  </nav>
+  <main class="content-area"><ng-view></ng-view></main>
+</div>
+
+<script type="text/ng-template" id="home.html">
+<section>
+  <div class="home-hero">
+    <div class="hero-text">
+      <h1>Hello, I'm<br><span class="highlight">Nilesh Jaiswal</span></h1>
+      <p>Final-year Information Technology student seeking an AI/ML internship. Built and compared machine learning models
+(KNN, Random Forest) in Python, and shipped an ML prediction service as a REST API with FastAPI and Docker.
+Comfortable with the full workflow: data preprocessing, feature engineering, model evaluation, API deployment and LLM
+integration (Groq). Looking to apply these skills on real-world problems in a team.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#!/projects">View Projects →</a>
+        <a class="btn-secondary" href="#!/contact">Get in Touch</a>
+      </div>
+      <div class="skills-chips">
+        <span class="chip" ng-repeat="s in skills">{{s}}</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="avatar-container">
+        <div class="avatar-ring2"></div>
+        <div class="avatar-ring"></div>
+        <img src="N.jpeg" alt="Nilesh Jaiswal" class="profile-img">
+      </div>
+    </div>
+  </div>
+</section>
+</script>
+
+<script type="text/ng-template" id="projects.html">
+<section>
+  <div class="section-header">
+    <div class="tag">// My Work</div>
+    <h1>Featured Projects</h1>
+    <p>A selection of things I've built with passion and precision.</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card" ng-repeat="p in projects">
+      <div class="project-num">0{{$index+1}}</div>
+      <div class="project-arrow">↗</div>
+      <h3>{{p.name}}</h3>
+      <p>{{p.desc}}</p>
+      <div class="tech-tags"><span class="tech-tag" ng-repeat="t in p.tags">{{t}}</span></div>
+    </div>
+  </div>
+</section>
+</script>
+
+<script type="text/ng-template" id="certificates.html">
+<section>
+  <div class="section-header">
+    <div class="tag">// Achievements</div>
+    <h1>Certificates</h1>
+    <p>Click any certificate to view the official credential.</p>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-card" ng-repeat="c in certs" ng-click="open(c.link)">
+      <div class="cert-icon">{{c.icon}}</div>
+      <h3>{{c.name}}</h3>
+      <div class="cert-provider">{{c.provider}}</div>
+      <div class="cert-cta">View Certificate ↗</div>
+    </div>
+  </div>
+</section>
+</script>
+
+<script type="text/ng-template" id="education.html">
+<section>
+  <div class="section-header">
+    <div class="tag">// Academic Journey</div>
+    <h1>Education</h1>
+    <p>My academic background and the foundations that shape my skills.</p>
+  </div>
+  <div class="edu-timeline">
+    <div class="edu-item" ng-repeat="e in edu">
+      <div class="edu-dot">{{e.icon}}</div>
+      <div class="edu-body">
+        <div class="edu-year">{{e.year}}<span class="edu-ongoing" ng-if="e.ongoing"><span class="dot" style="width:6px;height:6px;display:inline-block"></span> Ongoing</span></div>
+        <h3>{{e.degree}}</h3>
+        <div class="edu-inst">{{e.inst}}</div>
+        <div class="edu-uni">{{e.uni}}</div>
+        <div class="edu-chips"><span class="edu-chip" ng-repeat="s in e.subjects">{{s}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</script>
+
+<script type="text/ng-template" id="contact.html">
+<section>
+  <div class="section-header">
+    <div class="tag">// Let's Talk</div>
+    <h1>Get In Touch</h1>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <h2>Let's build something great.</h2>
+      <p>Whether you have a project in mind, want to collaborate, or just want to say hi — my inbox is always open.</p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:nileshjaiswal2055@gmail.com"><div class="contact-link-icon">✉</div><div class="contact-link-body"><small>Email</small><span>nileshjaiswal2055@gmail.com</span></div></a>
+        <a class="contact-link" href="https://www.linkedin.com/in/nilesh-jaiswal-1561142a6/" target="_blank"><div class="contact-link-icon">in</div><div class="contact-link-body"><small>LinkedIn</small><span>linkedin.com/in/nileshjaiswal</span></div></a>
+        <a class="contact-link" href="https://github.com/nileshjaiswal01" target="_blank"><div class="contact-link-icon">⌥</div><div class="contact-link-body"><small>GitHub</small><span>github.com/nileshjaiswal01</span></div></a>
+        <a class="contact-link" href="#"><div class="contact-link-icon">📍</div><div class="contact-link-body"><small>Location</small><span>Ahmedabad, Gujarat</span></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+</script>
+
+<script>
+angular.module('portfolioApp',['ngRoute'])
+.config(function($routeProvider,$locationProvider){
+  $locationProvider.hashPrefix('!');
+  $routeProvider
+    .when('/home',{templateUrl:'home.html',controller:'HomeCtrl'})
+    .when('/projects',{templateUrl:'projects.html',controller:'ProjectsCtrl'})
+    .when('/certificates',{templateUrl:'certificates.html',controller:'CertsCtrl'})
+    .when('/education',{templateUrl:'education.html',controller:'EduCtrl'})
+    .when('/contact',{templateUrl:'contact.html'})
+    .otherwise({redirectTo:'/home'});
+})
+.service('Data',function(){
+  this.skills=['HTML/CSS','JavaScript','AngularJS (Fundamentals: Routing,SPA Architecture)','Python','FAST API','SQL','Docker'];
+  this.projects=[
+    {name:'Smart Luggage Bag',desc:'Core team member of a smart luggage app that helps travellers manage and monitor their luggage; contributed from planning to final delivery.Developed the front-end interface: radar proximity display, GPS tracking, charging status and lock/unlock controls onone simple screen.Awarded Gold Medal and 1st Rank among all projects in the college.',tags:['IoT','UI','Mobile']},
+    {name:'Jarvis AI Assistant',desc:'Built a Python voice assistant, activated by the wake word "Hi Jarvis", that answers questions using the Groq LLM/API.Implemented system tasks such as opening the camera, changing volume and opening websites. Integrated speech-to-text and text-to-speech with a modular command design so new features are easy to add.',tags:['Python','API','Stream lit']},
+    {name:'Gujarat House Price Predictor',desc:'Built and compared KNN and Random Forest models to predict house prices across Gujarat cities.with accuracy, precision and recall plot it using',tags:["Python", "Scikit-learn", "KNN", "RandomForest", "Pandas", "Matplotlib"]},
+    {name:'FASTAPI Insurance Premium',desc:'Developed a RESTful API using FastAPI to predict insurance premium categories using a pre-trained machine learning model.input validation and data preprocessing with Pydantic, including BMI calculation, age-group classification, lifestyle risk assessment, and city-tier classification.trained ML model to generate predictions based on customer attributes, including income, smoking habits, and occupation.',tags:['Python','FAST API','Docker']}
+  ];
+  this.certs=[
+    {name:'AI Dataset Collection using Web Scraping',provider:'Sal Education',icon:'🌐',link:'C:\Users\nileshjaiswal\IT\AWP  CV\web scrap certificate'},
+    {name:'Python',provider:'Coursera',icon:'🐍',link:'https://example.com/cert1'}
+  ];
+  this.edu=[
+    {icon:'🎓',degree:'BE – Information Technology',inst:'SAL Engineering and Technical Institute',uni:'Gujarat Technological University (GTU)',year:'2023 – 2027',ongoing:true,subjects:['Data Structures','Python','AL','ML','Web Development','DBMS','Computer Networks','OOP','Software Engineering']},
+    {icon:'📘',degree:'Higher Secondary (Science)',inst:'Gujarat Higher Secondary Board',uni:'GSHSEB',year:'2021 – 2023',ongoing:false,subjects:['Physics','Chemistry','Mathematics','Computer Science']}
+  ];
+})
+.controller('AppCtrl',function($scope,$location){
+  $scope.isActive=function(p){return $location.path()===p;};
+})
+.controller('HomeCtrl',function($scope,Data){$scope.skills=Data.skills;})
+.controller('ProjectsCtrl',function($scope,Data){$scope.projects=Data.projects;})
+.controller('CertsCtrl',function($scope,Data){
+  $scope.certs=Data.certs;
+  $scope.open=function(url){if(url&&url!=='#')window.open(url,'_blank');};
+})
+.controller('EduCtrl',function($scope,Data){$scope.edu=Data.edu;});
+</script>
+</body>
+</html>
